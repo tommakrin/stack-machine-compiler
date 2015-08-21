@@ -1,0 +1,170 @@
+typedef struct tree{
+	char *token;
+	TREE *l;
+	TREE *r;
+	TREE *child;
+}TREE;
+
+/* Make identifier leaves */
+
+TREE *make_id_leaf(char *s){
+
+	TREE *leafId = malloc(sizeof(TREE));
+	char *str = malloc(sizeof(char)*10);
+	str = s;
+
+	leafId->token = str;
+	leafId->l = NULL;
+	leafId->r = NULL;
+	leafId->child = NULL;
+
+	printf("ID Leaf is: %s\n", leafId->token);
+
+	return (leafId);
+}
+
+/* Make number leaves */
+
+TREE *make_number_leaf(int n){
+
+	TREE *leafNum = malloc(sizeof(TREE));
+
+	char *ch = malloc(sizeof(char)*10);
+
+	sprintf(ch, "%d", n); /* Effective way to convert int to string */
+
+	leafNum->token = ch;
+	leafNum->l = NULL;
+        leafNum->r = NULL;
+        leafNum->child = NULL;
+
+	printf("NUM Leaf is: %s\n", leafNum->token);
+
+	return (leafNum);
+}
+
+/* Addition tree */
+
+TREE *make_plus_tree(TREE *l, TREE *r){
+
+	TREE *plusTree = malloc(sizeof(TREE));
+
+	plusTree->token = "+";
+	plusTree->l = l;
+	plusTree->r = r;
+	plusTree->child = NULL;
+
+	return (plusTree);
+
+}
+
+/* Multiplication tree */
+
+TREE *make_times_tree(TREE *l, TREE *r){
+
+	TREE *timesTree = malloc(sizeof(TREE));
+
+	timesTree->token = "*";
+	timesTree->l = l;
+	timesTree->r = r;
+	timesTree->child = NULL;
+
+	return (timesTree);
+
+}
+
+/* Minus tree */
+
+TREE *make_minus_tree(TREE *child){
+
+	TREE *minusTree = malloc(sizeof(TREE));
+
+        minusTree->token = "-";
+        minusTree->l = NULL;
+        minusTree->r = NULL;
+        minusTree->child = child;
+
+        return (minusTree);
+
+}
+
+TREE *make_eq_tree(char *s, TREE *child){
+
+	TREE *eqTree = malloc(sizeof(TREE));
+	char *str = malloc(sizeof(char)*10);
+	str = s;
+
+        eqTree->token = str;
+	eqTree->l = NULL;
+	eqTree->r = NULL;
+        eqTree->child = child;
+
+        return (eqTree);
+
+}
+
+TREE *make_and_tree(TREE *l, TREE *r){
+
+        TREE *andTree = malloc(sizeof(TREE));
+
+        andTree->token = "&&";
+        andTree->l = l;
+        andTree->r = r;
+        andTree->child = NULL;
+
+        return (andTree);
+
+}
+
+TREE *make_let_tree(TREE *l, TREE *r){
+
+        TREE *letTree = malloc(sizeof(TREE));
+
+	letTree->token = l->token;
+
+        //letTree->token = "LET";
+        letTree->l = l;
+        letTree->r = r;
+        letTree->child = NULL;
+
+        return (letTree);
+
+}
+
+
+void printtree(TREE *tree)
+{
+
+	TREE *tr = malloc(sizeof(TREE));
+	tr = tree;
+
+        if (tr->l || tr->r){
+                printf("(");
+        }
+	if (tr->child){
+		printf("(");
+		if (tr->token != "-"){
+			printf(" = ");
+		}
+	}
+
+	printf(" %s ", tr->token);
+
+        	if (tr->l){
+            		printtree(tr->l);
+        	}
+
+		if (tr->r){
+	        	printtree(tr->r);
+        	}
+
+	if (tr->child){
+	    printtree(tr->child);
+	}
+        if (tr->l || tr->r){
+            printf(")");
+        }
+	if (tr->child){
+	    printf(")");
+	}
+}
